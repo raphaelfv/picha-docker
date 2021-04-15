@@ -8,3 +8,5 @@ celerybeat.pid
 celerybeat-schedule
 celerybeat-schedule.db
 whoosh_index/
+
+virtualenv/

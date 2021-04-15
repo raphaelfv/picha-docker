@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  picha:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    command: >
+      sh -c "cd code && python3 manage.py runserver 0.0.0.0:8000"
+    environment:
+        - PYTHONUNBUFFERED=1          
+
+  redis-picha:
+    image: redis:alpine
+    
+  celery-picha:
+    restart: always
+    build:
+      context: .
+    command: celery -A picha worker -l info
+    volumes:
+        - .:/code
+    depends_on:
+      - redis-picha
+      - picha
+    environment:
+        - PYTHONUNBUFFERED=1
